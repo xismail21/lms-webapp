@@ -1,0 +1,25 @@
+// mailer.js
+const nodemailer = require('nodemailer');
+
+// Erstelle den Transporter für den E-Mail-Versand
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // Hier kannst du auch andere Anbieter verwenden
+    auth: {
+        user: 'xismail621@gmail.com', // Deine Gmail-Adresse
+        pass: 'cufd dylm lwgi bemn' // Dein App-Passwort oder Gmail-Passwort
+    }
+});
+
+// Funktion, um eine E-Mail zu senden
+const sendMail = (to, subject, text) => {
+    const mailOptions = {
+        from: 'xismail621@gmail.com', // Absender
+        to: to,                        // Empfänger
+        subject: subject,              // Betreff
+        text: text                     // E-Mail-Inhalt
+    };
+
+    return transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendMail }; // Exportiere die sendMail-Funktion

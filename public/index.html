@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lern App</title>
+    <link rel="icon" href="/images/dsdsds.png" type="image/png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%; /* Volle Breite für den Body */
+}
+
+#app {
+    width: 100%; /* Volle Breite für den App-Container */
+    max-width: 1080px; /* Maximalbreite beibehalten */
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333; /* Einheitliche Farbe für Titel */
+}
+
+header {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between; /* Platz zwischen Logo und Links */
+    align-items: center;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box; /* Stellt sicher, dass Padding enthalten ist */
+}
+
+header h1 {
+    position: absolute; /* Vom Layoutfluss lösen */
+    left: 50%; /* Zentriert den Titel horizontal */
+    transform: translateX(-50%); /* Exakte Zentrierung */
+    margin: 0;
+    text-align: center;
+    white-space: nowrap; /* Verhindert Umbruch des Titels */
+    color: white; /* Farbe bleibt weiß */
+}
+
+header .bbq-logo {
+    margin-left: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+header .bbq-logo:hover {
+    opacity: 1;
+}
+
+#header-links {
+    position: absolute; /* Entfernt die Links aus dem normalen Layout */
+    right: 15px; /* Rechtsbündig */
+    display: flex;
+    gap: 15px; /* Abstand zwischen den Links */
+    align-items: center;
+}
+
+#header-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#login, #register {
+    max-width: 400px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 50px; /* Platz oberhalb des Formulars */
+}
+
+#login h2, #register h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+#login p, #register p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#login p a, #register p a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#login p a:hover, #register p a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    background-color: #28a745;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%; /* Volle Breite */
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+footer p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+footer .logo-link {
+    margin-top: 10px;
+}
+
+footer .logo-link a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+}
+
+footer .logo-link img {
+    width: 120px;
+    height: auto;
+    margin-right: 10px;
+}
+
+    </style>
+</head>
+<body>
+    
+    <header id="header">
+        <div class="bbq-logo">
+            <a href="https://www.bbq.de/" target="_blank">BBQ</a> <!-- BBQ als Link -->
+        </div>
+        <h1>Lern App</h1> <!-- Der Haupttitel bleibt unverändert -->
+        <div id="header-links">
+            <!-- Links werden erst nach dem Login angezeigt -->
+        </div>
+    </header>
+    
+    
+
+    <div id="app">
+        <div id="login">
+            <h2>Anmeldung</h2>
+            <input type="text" id="login-username" placeholder="E-Mail" required>
+            <input type="password" id="login-password" placeholder="Passwort" required>
+            <button onclick="login()">Anmelden</button>
+            <p>Noch nicht registriert? <a href="#" onclick="showRegister()">Hier registrieren</a></p>
+        </div>
+
+        <div id="register">
+            <h2>Registrierung</h2>
+            <input type="text" id="register-username" placeholder="Benutzername" required>
+            <input type="email" id="register-email" placeholder="E-Mail" required>
+            <input type="password" id="register-password" placeholder="Passwort" required>
+        
+            <!-- Auswahl für die Rolle (User oder Dozent) -->
+            <select id="register-role" required>
+                <option value="">Wählen Sie eine Rolle</option>
+                <option value="user">User</option>
+                <option value="dozent">Dozent</option>
+            </select>
+        
+            <button onclick="register()">Registrieren</button>
+            <p>Schon registriert? <a href="#" onclick="showLogin()">Hier anmelden</a></p>
+        </div>
+        
+
+        <div id="dashboard">
+    <h2>Deine Lernmodule</h2>
+    <div id="user-info" data-role="dozent"> <!-- Beispiel für Dozent -->
+    </div>
+    
+    <!-- Button zum Erstellen eines Moduls -->
+    <button class="btn btn-secondary mb-3" onclick="toggleModuleForm()">Modul erstellen</button>
+
+    <!-- Modul Erstellen Formular (versteckt) -->
+    <div id="create-module" style="display: none;">
+        <h3>Modul Erstellen</h3>
+        <form id="module-form">
+            <div class="form-group">
+                <label for="module-title">Modul Titel</label>
+                <input type="text" id="module-title" class="form-control" placeholder="Titel des Moduls" required>
+            </div>
+            <div class="form-group">
+                <label for="module-description">Beschreibung</label>
+                <textarea id="module-description" class="form-control" rows="3" placeholder="Kurze Beschreibung des Moduls" required></textarea>
+            </div>
+            <button type="button" class="btn btn-success" onclick="createModule()">Modul erstellen</button>
+        </form>
+    </div>
+
+    <!-- Module anzeigen -->
+    <div id="modules" class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Grundlagen</h5>
+                    <p class="card-text">Einführung in grundlegende Konzepte der Informatik und Programmierung.</p>
+                    <button class="btn btn-primary" onclick="startModule(1)">Start</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Datenbank</h5>
+                    <p class="card-text">Erlerne die Grundlagen von Datenbanken und SQL-Abfragen.</p>
+                    <button class="btn btn-primary" onclick="startModule(2)">Start</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Programmieren</h5>
+                    <p class="card-text">Vertiefe deine Programmierkenntnisse und arbeite an praktischen Projekten.</p>
+                    <button class="btn btn-primary" onclick="startModule(3)">Start</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Weitere Abschnitte (Fragen, Statistiken) bleiben unverändert -->
+<div id="questions" style="display: none;">
+    <h2>Beantworte die Fragen!</h2>
+    <div id="question-container"></div>
+    <button class="btn btn-success" onclick="submitAnswers()">Antworten einreichen</button>
+    <div id="feedback"></div>
+</div>
+
+<div id="statistics" style="display: none;">
+    <h2>Deine Statistiken</h2>
+    <div class="stat-item">Richtige Antworten: <span id="correct-answers">0</span></div>
+    <div class="stat-item">Falsche Antworten: <span id="incorrect-answers">0</span></div>
+</div>
+
+
+    <footer>
+        <p>&copy; 2025 BBQ – Baumann Bildung und Qualifizierung GmbH.</p>
+
+    </footer>
+    
+
+    <script>
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+
+        function showPage(page) {
+            // Setzen der URL mit History API
+            history.pushState({}, '', page);
+
+            // Verstecke alle Seiten
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('register').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('questions').style.display = 'none';
+            document.getElementById('statistics').style.display = 'none';
+
+            // Zeige die angeforderte Seite
+            document.getElementById(page).style.display = 'block';
+
+            // Update Header Links
+            updateHeaderLinks(page);
+        }
+
+        function updateHeaderLinks(page) {
+            let headerLinks = '';
+            if (page !== 'login' && page !== 'register') {
+                headerLinks = `
+                    <a href="#" onclick="logout()">Abmelden</a>
+                    <a href="#" onclick="showPage('dashboard')">Dashboard</a>
+                    <a href="#" onclick="showPage('statistics')">Statistiken</a>
+                `;
+            }
+            document.getElementById('header-links').innerHTML = headerLinks;
+        }
+
+        function showDashboard() {
+            showPage('dashboard');
+        }
+
+        function showStatistics() {
+            showPage('statistics');
+        }
+
+        function logout() {
+            loggedIn = false;
+            document.getElementById('header-links').innerHTML = '';
+            showPage('login');
+        }
+
+        let loggedIn = false;
+
+        function showRegister() {
+            showPage('register');
+        }
+
+        function showLogin() {
+            showPage('login');
+        }
+
+        async function register() {
+    const username = document.getElementById('register-username').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    const role = document.getElementById('register-role').value;  // Rolle holen
+
+    // Überprüfen, ob eine Rolle ausgewählt wurde
+    if (!role) {
+        alert('Bitte wählen Sie eine Rolle aus.');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password, role }) // Rolle mit übergeben
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            showLogin();  // Bei erfolgreicher Registrierung Login-Formular anzeigen
+        } else {
+            alert(data.message || 'Fehler bei der Registrierung.');
+        }
+    } catch (error) {
+        console.error('Fehler:', error);
+        alert('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.');
+    }
+}
+
+        async function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: username, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    loggedIn = true;
+                    updateHeaderLinks('dashboard');
+                    showPage('dashboard');
+                } else {
+                    alert(data.message || 'Login fehlgeschlagen.');
+                }
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.');
+            }
+        }
+
+        function startModule(moduleId) {
+            const questions = [
+                { question: "Frage 1: Was ist JavaScript?", options: ["Antwort 1", "Antwort 2", "Antwort 3"], correctAnswer: 0 },
+                { question: "Frage 2: Was ist eine Variable?", options: ["Antwort 1", "Antwort 2", "Antwort 3"], correctAnswer: 1 },
+                { question: "Frage 3: Was ist eine Schleife?", options: ["Antwort 1", "Antwort 2", "Antwort 3"], correctAnswer: 2 },
+                { question: "Frage 4: Was ist eine Funktion?", options: ["Antwort 1", "Antwort 2", "Antwort 3"], correctAnswer: 1 },
+                { question: "Frage 5: Was ist ein Array?", options: ["Antwort 1", "Antwort 2", "Antwort 3"], correctAnswer: 2 }
+            ];
+
+            showPage('questions');
+            currentQuestionIndex = 0;
+            showQuestion(questions[currentQuestionIndex]);
+        }
+
+        function showQuestion(question) {
+            const questionContainer = document.getElementById('question-container');
+            questionContainer.innerHTML = '';
+
+            const questionElement = document.createElement('div');
+            questionElement.classList.add('mb-3');
+            questionElement.innerHTML = `<p>${question.question}</p>
+            <div>
+                ${question.options.map((option, i) => 
+                    `<label><input type="radio" name="question" value="${option}" onclick="checkAnswer(${i})"> ${option}</label><br>` 
+                ).join('')}
+            </div>`;
+            questionContainer.appendChild(questionElement);
+        }
+
+        function checkAnswer(selectedIndex) {
+    const questions = [
+        { 
+            question: "Frage 1: Was ist JavaScript?", 
+            options: ["Eine Programmiersprache", "Ein Webbrowser", "Ein Betriebssystem"], 
+            correctAnswer: 0 
+        },
+        { 
+            question: "Frage 2: Was ist eine Variable?", 
+            options: ["Ein Speicherplatz für Daten", "Ein Algorithmus", "Eine Schleife"], 
+            correctAnswer: 0 
+        },
+        { 
+            question: "Frage 3: Was ist eine Schleife?", 
+            options: ["Eine Funktion zum Speichern von Daten", "Eine Anweisung, die sich wiederholt", "Eine Art von Array"], 
+            correctAnswer: 1 
+        },
+        { 
+            question: "Frage 4: Was ist eine Funktion?", 
+            options: ["Eine Methode, um Daten zu speichern", "Ein Block von Code, der etwas ausführt", "Eine Art von Schleife"], 
+            correctAnswer: 1 
+        },
+        { 
+            question: "Frage 5: Was ist ein Array?", 
+            options: ["Eine Schleife, die sich wiederholt", "Eine Datenstruktur zur Speicherung mehrerer Werte", "Eine Funktion zum Erstellen von Variablen"], 
+            correctAnswer: 1 
+        }
+    ];
+
+
+            const currentQuestion = questions[currentQuestionIndex];
+
+            if (selectedIndex === currentQuestion.correctAnswer) {
+                correctAnswers++;
+            } else {
+                incorrectAnswers++;
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                showQuestion(questions[currentQuestionIndex]);
+            } else {
+                submitAnswers();
+            }
+        }
+
+        function submitAnswers() {
+            document.getElementById('correct-answers').textContent = correctAnswers;
+            document.getElementById('incorrect-answers').textContent = incorrectAnswers;
+
+            let feedback = '';
+            if (correctAnswers === 5) {
+                feedback = '<p style="color: green;">Herzlichen Glückwunsch! Du hast alle Fragen richtig beantwortet!</p>';
+            } else {
+                feedback = '<p style="color: red;">Nicht alle Antworten sind korrekt. Übe weiter!</p>';
+            }
+            document.getElementById('feedback').innerHTML = feedback;
+
+            showPage('statistics');
+        }
+       function toggleModuleForm() {
+    const form = document.getElementById('create-module');
+    const formButton = document.querySelector('button[onclick="toggleModuleForm()"]');
+    const userInfo = document.getElementById('user-info');
+    const userRole = userInfo ? userInfo.getAttribute('data-role') : '';
+
+    // Nur für Dozenten sichtbar
+    if (userRole === 'dozent') {
+        if (form.style.display === 'none') {
+            form.style.display = 'block';  // Formular anzeigen
+            formButton.innerText = 'Formular schließen';  // Button-Text ändern
+        } else {
+            form.style.display = 'none';  // Formular ausblenden
+            formButton.innerText = 'Modul erstellen';  // Button-Text zurücksetzen
+        }
+    } else {
+        alert('Sie haben keine Berechtigung, dieses Formular zu sehen.');
+    }
+}
+
+// Funktion zum Erstellen eines Moduls
+async function createModule() {
+    const title = document.getElementById('module-title').value;
+    const description = document.getElementById('module-description').value;
+
+    // Überprüfen, ob alle Felder ausgefüllt sind
+    if (!title || !description) {
+        alert('Bitte füllen Sie alle Felder aus.');
+        return;
+    }
+
+    try {
+        // Sende die Modul-Daten an den Server (anpassen, um die tatsächliche URL und API zu verwenden)
+        const response = await fetch('http://localhost:3000/create-module', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, description })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Modul erfolgreich erstellt!');
+            // Optionale Aktion: Modul-Liste aktualisieren
+            // loadModules();
+        } else {
+            alert(data.message || 'Fehler beim Erstellen des Moduls.');
+        }
+    } catch (error) {
+        console.error('Fehler:', error);
+        alert('Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.');
+    }
+}
+
+        // Seitenaufrufe beim Laden der App
+        window.onload = function() {
+            const path = window.location.pathname;
+
+            if (path === "/login") {
+                showPage('login');
+            } else if (path === "/register") {
+                showPage('register');
+            } else if (path === "/dashboard") {
+                showPage('dashboard');
+            } else if (path === "/statistics") {
+                showPage('statistics');
+            } else {
+                showPage('login');
+            }
+        };
+
+    </script>
+</body>
+</html>
